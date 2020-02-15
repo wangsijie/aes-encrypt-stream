@@ -15,7 +15,7 @@ const fs = require('fs');
 const { createEncryptStream, createDecryptStream, setPassword } = require('aes-encrypt-stream');
 
 // password: 256 bit buffer
-setPassward(Buffer.from('f8647d5417039b42c88a75897109049378cdfce528a7e015656bd23cd18fb78a', 'hex'));
+setPassword(Buffer.from('f8647d5417039b42c88a75897109049378cdfce528a7e015656bd23cd18fb78a', 'hex'));
 
 // encrypt
 createEncryptStream(fs.createReadStream('origin.txt')).pipe(fs.createWriteStream('encrypted.txt'))
