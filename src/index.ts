@@ -27,8 +27,9 @@ export function setPassword(p: Buffer) {
 
 export function createEncryptStream(input: Stream): Stream {
     checkPassword();
+    let passwordLocal =  password;
     const iv = crypto.randomBytes(16);
-    const encryptStream = crypto.createCipheriv(algorithm, password, iv);
+    const encryptStream = crypto.createCipheriv(algorithm, passwordLocal, iv);
     let inited: boolean = false;
     return input.pipe(encryptStream).pipe(new Transform({
         transform(chunk, encoding, callback) {
@@ -45,12 +46,15 @@ export function createEncryptStream(input: Stream): Stream {
 
 export function createDecryptStream(output: Writable): Transform {
     checkPassword();
+
+    let passwordLocal =  password;
+
     let iv: string;
     return new Transform({
         transform(chunk, encoding, callback) {
             if (!iv) {
                 iv = chunk.slice(0, 16);
-                const decryptStream = crypto.createDecipheriv(algorithm, password, iv);
+                const decryptStream = crypto.createDecipheriv(algorithm, passwordLocal, iv);
                 this.pipe(decryptStream).pipe(output);
                 this.push(chunk.slice(16));
             } else {
